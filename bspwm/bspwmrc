@@ -1,0 +1,20 @@
+#! /bin/sh
+
+sxhkd &
+compton &
+nitrogen --restore &
+~/.config/polybar/launch.sh &
+
+bspc monitor -d "Misc " "Browser " "Terminal " "Project " "Writing " "Media "
+
+bspc config border_width         0
+bspc config window_gap           8
+
+bspc config split_ratio          0.5
+bspc config borderless_monocle   false
+bspc config gapless_monocle      false
+
+bspc rule -a qutebrowser desktop=^2
+bspc rule -a firefox desktop=^2
+
+xsetroot -cursor_name left_ptr

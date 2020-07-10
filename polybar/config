@@ -1,0 +1,257 @@
+; This is the setup script for my polybar top bar.
+; Certain modules have been split into a information module and an icon module for formatting, such as the memory and CPU modules.
+; I have purposely not set padding or a module margin, opting instead to utilize spaces so as to only have whitespaces where I want them.
+
+
+
+; Defines colors
+[colors]
+	main = #eee
+	active = #9474A8
+	inactive = #999
+	warn = #ed5a15
+	back = #99000000
+	selected = #00000000
+
+
+
+; Defines bar and formatting for entire bar
+[bar/bspbar]
+
+	; Enables showing/hiding polybar with keyboard shortcuts
+	enable-ipc = true
+
+	; Main font
+	font-0 = "Terminus:style=Regular:pixelsize=8:antialias=false;1"
+
+	; Icon font
+	font-1 = "polybar\-icons:style=Regular:pixelsize=8;1"
+
+	; Monospace font for separators
+	font-2 = "Monospace:style=Regular:pixelsize=10:antialias=false;2"
+
+	; Geometry configuration
+	height = 16
+	width = 100%:-16
+	offset-y = 8
+	offset-x = 8
+
+	; Defines main colors
+	background = ${colors.back}
+	foreground = ${colors.main}
+
+	; Defines ordering and positioning of modules
+	modules-left = bspwm line title
+	modules-center = date
+	modules-right = alsa sep memicon memory sep cpuicon cpu sep tempicon temperature sep battery line menu
+
+
+
+; Defines BSPWM workspace tab temperature sep module
+[module/bspwm]
+type = internal/bspwm
+
+	; Defines colors for tags
+	label-focused-foreground = ${colors.active}
+	label-focused-background = ${colors.selected}
+	label-empty-foreground = ${colors.inactive}
+	label-urgent-foregruond = ${colors.warn}
+
+
+
+; Defines window title module
+[module/title]
+type = internal/xwindow
+label-empty = BSPWM Desktop
+
+	; Makes sure it does not interfere with clock
+	label-maxlen = 50
+
+	; Defines title colors
+	label-foreground = ${colors.active}
+	label-empty-foreground = ${colors.active}
+
+
+
+; Defines date and time module
+[module/date]
+type = internal/date
+
+	; Sets the time and date formats to toggle between
+	time = %T
+	time-alt = %m-%d-%Y
+	label = %time%
+
+
+
+; Defines memory usage module
+[module/memory]
+type = internal/memory
+
+	label = %mb_used%
+	interval = 0.1
+
+
+
+; Defines module to separate icons
+[module/memicon]
+type = custom/text
+
+	; Uses the icon font
+	content-font = 2
+	content-foreground = ${colors.active}
+	content = "C "
+
+
+
+; Defines CPU usage module
+[module/cpu]
+type = internal/cpu
+	label = %percentage%%
+	interval = 0.1
+
+
+
+; Defines module to separate icons
+[module/cpuicon]
+type = custom/text
+
+	; Uses the icon font
+	content-font = 2
+	content-foreground = ${colors.active}
+	content = "B "
+
+
+
+; Defines alsa volume module
+[module/alsa]
+type = internal/alsa
+
+	; Sets basic percenatge label
+	label-volume = %percentage%%
+
+	; Uses the icon font to show volume level
+	ramp-volume-font = 2
+	ramp-volume-0 = 7
+	ramp-volume-1 = 8
+	ramp-volume-2 = 9
+	ramp-volume-foreground = ${colors.active}
+
+	; Shows percentace and volume icon together
+	format-volume = <ramp-volume> <label-volume>
+
+	; When muted it only shows the icon
+	label-muted = A
+	label-muted-font = 2
+	label-muted-foreground = ${colors.warn}
+	interval = 0.1
+
+
+
+; Defines CPU temperature module
+[module/temperature]
+
+	type = internal/temperature
+	label = %temperature-c%
+
+
+
+; Defines module to separate icons
+[module/tempicon]
+type = internal/temperature
+
+	; Uses the icon font
+	label-font = 2
+	label = "D "
+	label-foreground = ${colors.active}
+	
+	; Changes the color if it gets too hot
+	label-warn = "D "
+	label-warn-font = 2
+	label-warn-foreground = ${colors.warn}
+	warn-temperature = 70
+
+
+
+; Defines battery level module
+[module/battery]
+type = internal/battery
+
+	; Sets info about the computer's battery level
+	battery = BAT0
+	adapter = AC
+
+	; Sets the label to the plug icon when charging
+	label-charging = 6
+	label-charging-font = 2
+	label-charging-foreground = ${colors.active}
+
+	; Sets the icon to reflect battery capacity when discharging
+	ramp-capacity-0 = 0
+	ramp-capacity-1 = 1
+	ramp-capacity-2 = 2
+	ramp-capacity-3 = 3
+	ramp-capacity-4 = 4
+	ramp-capacity-font = 2
+	ramp-capacity-foreground = ${colors.active}
+
+	; Changes icon color when battery gets too low
+	ramp-capacity-0-foreground = ${colors.warn}
+
+	; Adds percentage label when discharging
+	label-discharging = %percentage%%
+
+	; Fornats the label to show icon and percentage when discharging
+	format-discharging = <ramp-capacity> <label-discharging>
+
+
+
+[module/menu]
+type = custom/menu
+
+	; Defines menu to enter the submenus
+	menu-0-0 = System
+	menu-0-0-exec = menu-open-1
+	menu-0-1 = "BSPWM  "
+	menu-0-1-exec = menu-open-2
+
+	; Defines menu to shut down, restart, or suspend the system
+	menu-1-0 = Shut Down
+	menu-1-0-exec = shutdown -h now
+	menu-1-1 = Reboot
+	menu-1-1-exec = reboot
+	menu-1-2 = "Suspend  "
+	menu-1-2-exec = systemctl suspend
+
+	; Defines menu to quit and restart BSPWM
+	menu-2-0 = Log Out
+	menu-2-0-exec = bspc quit
+	menu-2-1 = "Restart  "
+	menu-2-1-exec = bspc wm -r
+
+	; Sets the open and close buttons to a colored icon, and defines the separator
+	label-open = "E  "
+	label-open-font = 2
+	label-open-foreground = ${colors.warn}
+	label-close = F
+	label-close-font = 2
+	label-close-foreground = ${colors.warn}
+	label-separator = " | "
+
+
+
+; Defines module to separate icons
+[module/sep]
+type = custom/text
+
+	content = " | "
+
+
+
+; Defines taller module to separate icons
+[module/line]
+type = custom/text
+
+	content-font = 3
+	content = " | "
+

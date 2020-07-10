@@ -1,0 +1,98 @@
+/* This config file was mostly borrowed, but I did modify it to fit my theme. */
+
+* {
+	base00: #22222299;
+	base02: #44444466;
+	base03: #fba210;
+	base0A: #9474a8;
+	base0B: #140516aa;
+	base0C: #ed5a15;
+
+	spacing: 0;
+	background-color: transparent;
+	font: "Terminus 8";
+}
+
+window {
+	background-color: @base00;
+}
+
+mainbox {
+	children: [inputbar, message, listview];
+	spacing: 32px;
+	padding: 32px 0;
+}
+
+inputbar {
+	margin: 0 32px 0 32px;
+	padding: 8px 8px;
+	background-color: @base02;
+	children: [textbox-prompt-colon, entry, case-indicator];
+}
+
+prompt {
+	text-color: @base0B;
+}
+
+textbox-prompt-colon {
+	expand: false;
+	str: ":";
+	margin: 0 1ch 0 0;
+	text-color: @base03;
+}
+
+entry {
+	text-color: @base03;
+}
+
+case-indicator {
+	text-color: @base0C;
+}
+
+sidebar, message {
+	border: 1px 0;
+	border-color: @base0B;
+}
+
+button, textbox {
+	background-color: @base02;
+	text-color: @base03;
+	padding: 5px;
+}
+
+button selected {
+	background-color: @base0B;
+}
+
+listview {
+	scrollbar: false;
+	margin: 0 32 0 32;
+	columns: 2;
+	lines: 16;
+}
+
+element {
+	padding: 8px;
+	highlight: bold underline;
+}
+
+element normal {
+	background-color: transparent;
+}
+
+element selected {
+	background-color: @base0B;
+}
+
+element normal normal, element selected normal, element alternate normal {
+	text-color: @base03;
+}
+
+element normal urgent, element selected urgent, element alternate urgent {
+	text-color: @base0C;
+}
+
+element normal active, element selected active, element alternate active {
+	text-color: @base0A;
+}
+
